@@ -15,26 +15,22 @@ def make_directory():
     return path
 
 
-def update(data, filename):
+def update(file, filename):
     os.remove(filename)
-    file = open(filename, 'wb')
-    file.write(data)
-    #also need to check how much data can be sent at once may need to loop through receiving file/writing to file
-
-    #add check that created file?
-
+    add(file, filename)
 
 
 def remove(filename):
     os.remove(filename)
 
 
-def add(data, filename):
-    file = open(filename, 'wb')
-    file.write(data)
-    #also need to check how much data can be sent at once may need to loop through receiving file/writing to file
+def add(file, filename):
+    #change file already written to correct filename
 
-    #add check that created file?
+
+def write_file(file, data):
+    file.write(data)
+    #use this to create a file from the incoming file info in a loop. called if update or add.
 
 
 def main():
@@ -48,7 +44,8 @@ def main():
 
 
     #listening server
-    #parse data look for command. if update, add, remove then call function
+    #parse data look for command. if update or add then need to loop through receiving file and creating new file then call their functs
+    #if remove then just send filename to remove function
     #else break and close
 
 
