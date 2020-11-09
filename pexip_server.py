@@ -36,20 +36,3 @@ if __name__ == "__main__":
     main()
 
 
-
-
-
-
-################### Plan:
-
-#setup directory from arguments
-
-#Setup port and socket listening on
-#Set consantly listening for a message on that connection
-
-#Then code within the waiting that reacts to events
-
-#event: update <files> -> then update relevant files
-#event: delete <files> -> then remove relevant files
-
-#in later versions will update these events to be more optimal
