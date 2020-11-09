@@ -15,6 +15,16 @@ def find_path(directory): #currently assumes the file is in the same directory a
     return path
 
 
+#https://www.thepythoncode.com/article/send-receive-files-using-sockets-python info on sending/receiving files as need to send in sections
+
+def update():
+
+
+def add():
+
+
+def remove():
+
 
 def main():
     print("Starting Client")
@@ -25,8 +35,11 @@ def main():
     #use os.listdir and os.stat() and then status.st_mtime 
     old = 
     while true:
-        time.sleep(5) #waits and then gets new info from the 
-    #function to monitor the directory 
+        time.sleep(5)
+
+
+
+
     #dict store all files before and also all their mod times
     #then wait
     #then compare all files check for new and check for old at same time if find it then check updated 
