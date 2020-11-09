@@ -31,6 +31,7 @@ def main():
     #then wait
     #then compare all files check for new and check for old at same time if find it then check updated 
     #when find one then call event to send to server command and file name 
+    #file = open() then data = read() then send this along with filename 
 
 
 
