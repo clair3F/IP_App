@@ -15,13 +15,10 @@ BUFFER = 4096
 
 
 
-def get_dir_path(directory): #currently assumes the file is in the same directory as the script 
-    path = os.path.abspath(filename)#may not work as using directory not file
+
+def get_file_path(dir_path, filename):
+    path = os.path.join(dir_path, filename)
     return path
-
-
-def get_file_path(dir, filename):
-    #takes in the directory path and the filename and creates absolute path from this
 
 
 
@@ -43,7 +40,7 @@ def send_file(sock, filename, filepath, command):
 
     print("Connected to server")
     sock.send(command.encode())
-    sock.send(filesize.encode())#need to encode all three of these correctly
+    sock.send(filesize.encode())
     sock.send(filename.encode())
 
     with open(filename,"rb") as sending:
@@ -83,9 +80,9 @@ def remove(sock, filename):
 def main():
     print("Starting Client")
 
-    directory = sys.argv[0] #directory from arguments on command line
-    path = get_dir_path(directory)
-    print("Found directory: " + path)
+    dir_path = sys.argv[0] #directory from arguments on command line, assume give me a path...
+    #path = get_dir_path(directory)
+    print("Found directory: " + dir_path)
 
     #First steps: connection to server
     print("Setting up server connection...")
@@ -98,19 +95,21 @@ def main():
 
     #getting the old info
     print("Monitoring Directory...")
-    old = dir_info(path)
+    old = dir_info(dir_path)
     while true:
         time.sleep(5)
-        new = dir_info(path)
+        new = dir_info(dir_path)
 
         #check for add or update
         for file in new:
             if not file in old:
-                add(sock, file, get_file_path(dir, file))
+                add(sock, file, get_file_path(dir_path, file))
             
-            if #test value comparison
-
-            #check the update values
+            else: #or can use .items() in the for loop but don't need value of every file so less efficient?
+                old_value = old[file]
+                new_value = new[file]
+                if old_value != new_value:
+                    update(sock, file, get_file_path(dir_path, file))
 
         #check for removals
         for file in old:
