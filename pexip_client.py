@@ -21,6 +21,7 @@ def get_file_path(dir_path, filename):
     return path
 
 
+#https://www.thepythoncode.com/article/send-receive-files-using-sockets-python info on sending/receiving files as need to send in sections
 
 
 def dir_info(path):
