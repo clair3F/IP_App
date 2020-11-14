@@ -1,3 +1,4 @@
+#!/usr/bin/python
 ##Client side code for Synchronised folder over IP solution
 ##Author: Claire Fletcher
 
@@ -27,7 +28,8 @@ def get_file_path(dir_path, filename):
 def dir_info(path):
     dir = {}
     for file in os.listdir(path):
-        status = os.stat(file)
+        filepath = get_file_path(path, file)
+        status = os.stat(filepath)
         mod = status.st_mtime
         dir[file] = mod
     
@@ -39,12 +41,10 @@ def dir_info(path):
 def send_file(sock, filename, filepath, command):
     filesize = os.path.getsize(filepath)
 
-    print("Connected to server")
-    sock.send(command.encode())
-    sock.send(filesize.encode())
-    sock.send(filename.encode())
+    print("Sending file")
+    sock.send((command + '*' + str(filesize) + '*' + filename).encode())
 
-    with open(filename,"rb") as sending:
+    with open(filepath,"rb") as sending:
         read = sending.read(BUFFER)
         while read:
             sock.send(read)#is send the best command? what protocol etc?
@@ -56,14 +56,14 @@ def send_file(sock, filename, filepath, command):
 
 def update(sock, filename, filepath):
     print("Performing update command")
-    send_file(sock, filename, "update")
+    send_file(sock, filename, filepath, "update")
 
 
 
 
 def add(sock, filename, filepath):
     print("Performing add command")
-    send_file(sock, filename, "add")
+    send_file(sock, filename, filepath, "add")
 
 
 
@@ -71,8 +71,7 @@ def add(sock, filename, filepath):
 def remove(sock, filename):
     print("Performing remove command")
     command = "remove"
-    sock.send(command.encode())
-    sock.send(filename.encode())
+    sock.send((command + '*' + '0' + '*' + filename).encode())
 
 
 
@@ -81,8 +80,9 @@ def remove(sock, filename):
 def main():
     print("Starting Client")
 
-    dir_path = sys.argv[0] #directory from arguments on command line, assume give me a path...
-    #path = get_dir_path(directory)
+    dir_path = sys.argv[1] #directory from arguments on command line, assume give me a path...
+
+    #check for a valid directory 
     print("Found directory: " + dir_path)
 
     #First steps: connection to server
@@ -94,10 +94,16 @@ def main():
     #if statement then the print
     print("Connected to Server")
 
+    print("Sending over directory to be monitored")
+    for file in os.listdir(dir_path):
+        filepath = get_file_path(dir_path, file)
+        send_file(sock, file, filepath, "initial")
+        
+
     #getting the old info
     print("Monitoring Directory...")
     old = dir_info(dir_path)
-    while true:
+    while True:
         time.sleep(5)
         new = dir_info(dir_path)
 
