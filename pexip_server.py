@@ -57,7 +57,7 @@ def receive_file(conn, filesize):
 def main():
     
     print("Starting Server")
-    dir = sys.argv[0]
+    dir = sys.argv[0] #could also just assume it takes in a path
     path = make_directory(dir)
     print("Directory setup")
     os.chdir(path) #move into this directory 
@@ -89,13 +89,13 @@ def main():
         if command = "add":
             #tell client received add
             #assume next data is file
-            file = receive_file(conn, filesize)
+            receive_file(conn, filesize) #should create file called temporary
             add(filename)
 
         elif command = "update":
             #tell client received update
             #assume next data is file
-            file = receive_file(conn, filesize)
+            receive_file(conn, filesize)
             update(filename)
 
 
