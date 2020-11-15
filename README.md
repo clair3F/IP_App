@@ -2,7 +2,7 @@
 
 My solution to the sychronised directory across a client and a server is written in python on a windows OS and uses TCP.
 
-I spent approximately 5 hours on this and researched both documentation in python and also methods to synchronise directories in python. This led me to information on pydoc thus providing the html documentation found in the doc folder. I also found information on how to use the os package to interact with the files and to monitor them. 
+I spent approximately 7 hours on this - including research and documentation. I researched both documentation in python and also methods to synchronise directories in python. This led me to information on pydoc thus providing the html documentation found in the doc folder. I also found information on how to use the os package to interact with the files and to monitor them. 
 
 The solution does not consider the optimisation of partial files but does consider the optimisation of not sending the same file multiple times.
 
