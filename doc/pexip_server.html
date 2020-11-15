@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module pexip_server</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>pexip_server</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cclair%5Cdocuments%5Ccoding%5Cpexip%5Csrc%5Cserver%5Cpexip_server.py">c:\users\clair\documents\coding\pexip\src\server\pexip_server.py</a></font></td></tr></table>
+    <p><tt>Client&nbsp;side&nbsp;code&nbsp;for&nbsp;Synchronised&nbsp;folder&nbsp;over&nbsp;IP&nbsp;solution<br>
+Author:&nbsp;Claire&nbsp;Fletcher</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="constant.html">constant</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pydoc.html">pydoc</a><br>
+<a href="socket.html">socket</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-close_server"><strong>close_server</strong></a>(conn, sock)</dt><dd><tt>Closes&nbsp;the&nbsp;connections&nbsp;of&nbsp;the&nbsp;server&nbsp;and&nbsp;the&nbsp;sockets.<br>
+&nbsp;<br>
+Parameters:<br>
+conn&nbsp;--&nbsp;client&nbsp;connection&nbsp;being&nbsp;closed<br>
+sock&nbsp;--&nbsp;server&nbsp;socket&nbsp;being&nbsp;closed</tt></dd></dl>
+ <dl><dt><a name="-error_message"><strong>error_message</strong></a>(message)</dt><dd><tt>Prints&nbsp;and&nbsp;error&nbsp;message&nbsp;and&nbsp;exits&nbsp;the&nbsp;program&nbsp;with&nbsp;exit&nbsp;code&nbsp;1<br>
+&nbsp;<br>
+Parameters:<br>
+e&nbsp;--&nbsp;error<br>
+message&nbsp;--&nbsp;specific&nbsp;error&nbsp;message&nbsp;to&nbsp;be&nbsp;printed</tt></dd></dl>
+ <dl><dt><a name="-get_file_path"><strong>get_file_path</strong></a>(dir_path, filename)</dt><dd><tt>Gets&nbsp;the&nbsp;path&nbsp;of&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+Parameters:<br>
+dir_path&nbsp;--&nbsp;firectory&nbsp;of&nbsp;the&nbsp;file<br>
+filename&nbsp;--&nbsp;name&nbsp;of&nbsp;the&nbsp;file<br>
+&nbsp;<br>
+Returns:<br>
+path&nbsp;--&nbsp;the&nbsp;path&nbsp;of&nbsp;the&nbsp;file</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Main&nbsp;Server&nbsp;function.<br>
+&nbsp;<br>
+Setup:<br>
+-&nbsp;Takes&nbsp;the&nbsp;directory&nbsp;name&nbsp;given&nbsp;as&nbsp;an&nbsp;argument&nbsp;for&nbsp;the&nbsp;program&nbsp;and&nbsp;creates&nbsp;a&nbsp;directory&nbsp;from&nbsp;this.<br>
+-&nbsp;If&nbsp;the&nbsp;directory&nbsp;already&nbsp;exists&nbsp;it&nbsp;will&nbsp;continue&nbsp;with&nbsp;a&nbsp;warning.<br>
+-&nbsp;Sets&nbsp;up&nbsp;the&nbsp;server&nbsp;listening&nbsp;on&nbsp;a&nbsp;given&nbsp;host&nbsp;and&nbsp;port.<br>
+-&nbsp;Accepts&nbsp;a&nbsp;client&nbsp;connection&nbsp;on&nbsp;the&nbsp;socket.<br>
+-&nbsp;Then&nbsp;begins&nbsp;monitoring&nbsp;for&nbsp;client&nbsp;commands.<br>
+&nbsp;<br>
+Monitoring:<br>
+-&nbsp;Receives&nbsp;concatenated&nbsp;filename,&nbsp;filesize,&nbsp;and&nbsp;command&nbsp;wherein&nbsp;filesize&nbsp;is&nbsp;sent&nbsp;as&nbsp;0&nbsp;for&nbsp;remove&nbsp;command.<br>
+-&nbsp;Then&nbsp;uses&nbsp;simple&nbsp;if/elif/else&nbsp;to&nbsp;check&nbsp;for&nbsp;which&nbsp;command&nbsp;has&nbsp;been&nbsp;sent&nbsp;and&nbsp;then&nbsp;performs&nbsp;the&nbsp;command.<br>
+-&nbsp;For&nbsp;initial&nbsp;nothing&nbsp;is&nbsp;done&nbsp;excepting&nbsp;receiving&nbsp;the&nbsp;files.<br>
+-&nbsp;For&nbsp;update&nbsp;the&nbsp;file&nbsp;is&nbsp;received&nbsp;with&nbsp;a&nbsp;temporary&nbsp;file&nbsp;name&nbsp;then&nbsp;the&nbsp;old&nbsp;file&nbsp;is&nbsp;removed&nbsp;and&nbsp;the&nbsp;temporary&nbsp;renamed.<br>
+-&nbsp;For&nbsp;add&nbsp;the&nbsp;file&nbsp;is&nbsp;received&nbsp;same&nbsp;as&nbsp;for&nbsp;initial.<br>
+-&nbsp;For&nbsp;remove&nbsp;the&nbsp;filename&nbsp;is&nbsp;received&nbsp;and&nbsp;then&nbsp;this&nbsp;filename&nbsp;removed&nbsp;from&nbsp;the&nbsp;directory.</tt></dd></dl>
+ <dl><dt><a name="-make_directory"><strong>make_directory</strong></a>(dir)</dt><dd><tt>Makes&nbsp;a&nbsp;new&nbsp;directory&nbsp;in&nbsp;the&nbsp;location&nbsp;of&nbsp;the&nbsp;server&nbsp;program&nbsp;using&nbsp;given&nbsp;directory&nbsp;name.&nbsp;If&nbsp;it&nbsp;already&nbsp;exists,&nbsp;continue&nbsp;with&nbsp;warning.<br>
+&nbsp;<br>
+Parameters:<br>
+dir&nbsp;--&nbsp;name&nbsp;of&nbsp;directory&nbsp;being&nbsp;created<br>
+&nbsp;<br>
+Returns:<br>
+path&nbsp;--&nbsp;path&nbsp;of&nbsp;the&nbsp;created&nbsp;directory</tt></dd></dl>
+ <dl><dt><a name="-receive_file"><strong>receive_file</strong></a>(conn, filesize, name, dir_path)</dt><dd><tt>Receives&nbsp;a&nbsp;file&nbsp;from&nbsp;the&nbsp;client&nbsp;with&nbsp;a&nbsp;given&nbsp;name.<br>
+&nbsp;<br>
+Parameters:<br>
+conn&nbsp;--&nbsp;client&nbsp;connection&nbsp;receiving&nbsp;the&nbsp;file&nbsp;on<br>
+filesize&nbsp;--&nbsp;size&nbsp;of&nbsp;the&nbsp;file&nbsp;being&nbsp;received<br>
+name&nbsp;--&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;being&nbsp;created.&nbsp;May&nbsp;be&nbsp;a&nbsp;temporary&nbsp;name.<br>
+dir_path&nbsp;--&nbsp;the&nbsp;path&nbsp;of&nbsp;the&nbsp;directory&nbsp;being&nbsp;synchronised</tt></dd></dl>
+ <dl><dt><a name="-remove"><strong>remove</strong></a>(filename)</dt><dd><tt>Removes&nbsp;the&nbsp;file&nbsp;with&nbsp;filename&nbsp;from&nbsp;the&nbsp;directory.<br>
+&nbsp;<br>
+Parameters:<br>
+filename&nbsp;--&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;being&nbsp;removed</tt></dd></dl>
+</td></tr></table>
+</body></html>
