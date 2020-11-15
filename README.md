@@ -31,8 +31,9 @@ My solution does have a few shortcomings and also some assumptions:.
 * .send() is used for sending which may not work over a network with high traffic as effectively.
 * The data being sent is not currently being encrypted or secured in any way.
 * Does not handle folders within the directory, only files. Will create the folder as another file.
-* Assumes that after the concatenared command, file, filesize sent to the server the next packets are the data needed. This is a fair assumption as long as there are no crashes or lost packets.
+* Assumes that after the concatenated command, file, filesize sent to the server the next packets are the data needed. This is a fair assumption as long as there are no crashes or lost packets.
 * The system will likely not scale well to monitoring large amounts of files as it goes through every file whilst monitoring and handles each one consecutively which would likely become slow in larger directories. It also cannot monitor more than one directory.
+* Allows use of an existing server side directory with a warning of this incase the user is not aware. Then if there are files with the same name attempting to be sent it adds 1 to the existing filename. However, it does not do this well as it adds the number after the extension.
 
 
 # Improvements
