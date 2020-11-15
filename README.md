@@ -34,6 +34,7 @@ My solution does have a few shortcomings and also some assumptions:.
 * Assumes that after the concatenated command, file, filesize sent to the server the next packets are the data needed. This is a fair assumption as long as there are no crashes or lost packets.
 * The system will likely not scale well to monitoring large amounts of files as it goes through every file whilst monitoring and handles each one consecutively which would likely become slow in larger directories. It also cannot monitor more than one directory.
 * Allows use of an existing server side directory with a warning of this incase the user is not aware. Then if there are files with the same name attempting to be sent it adds 1 to the existing filename. However, it does not do this well as it adds the number after the extension.
+* Server can only accept one connection (as I set it to listen(1)) and will shut down when the client disconnects. This is done as otherwise it would assume the same client is reconnecting if it started listening again and would continue to then monitor the same directory.
 
 
 # Improvements
@@ -46,6 +47,7 @@ Shortcoming Imrovements:
 * I would add in the use of TLS and then encrypt the data with AES 128 bit or higher for a more secure sending of data. Other protocols and security principles could be looked into the extend this further. The solution could also implement FTPS protocol which is a good file transfer protocol which uses the TLS protocol.
 * I would look into ways to extend this to a larger system such as testing it with large amounts of data and also the folder solution discussed in the first improvement.
 * I would also optimise the file sending with partially similar data by potentially noting what the previous file contained and then only sending the new data. The server would then need to know where to write the new data in the file.
+* Currently when a client disconnects the server also shuts down. This could be improved to keep the server constant and just check that the connecting client still wants to monitor the same directory. So the client sends the server the directory name. This could also be extended to have the server accept multiple connections and monitor multiple directories at once.
 
 Interesting Improvements:
 * It would be interesting to implement this with a threaded system for quicker checks of the dictionary and updates; however, this would need to involve good concurrency and checks that files arent being sent multiple times.
