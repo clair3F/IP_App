@@ -12,10 +12,9 @@ import constant
 
 def error_message(message):
     '''
-    Prints and error message and exits the program with exit code 1
+    Prints an error message and exits the program with exit code 1
 
     Parameters:
-    e -- error
     message -- specific error message to be printed
     '''
     print(message)
@@ -50,7 +49,7 @@ def get_file_path(dir_path, filename):
     Gets the path of a file.
 
     Parameters:
-    dir_path -- firectory of the file
+    dir_path -- directory of the file
     filename -- name of the file
 
     Returns:
@@ -79,7 +78,7 @@ def receive_file(conn, filesize, name, dir_path):
     Parameters:
     conn -- client connection receiving the file on
     filesize -- size of the file being received
-    name -- name of the file being created. May be a temporary name.
+    name -- name of the file being created. 
     dir_path -- the path of the directory being synchronised
 
     '''
@@ -87,14 +86,20 @@ def receive_file(conn, filesize, name, dir_path):
     
     filepath = get_file_path(dir_path, name)
 
+    # checks for an existing file with the same name 
     if os.path.isfile(filepath):
         print("File exists in directory. Adding integer to existing filename")
+        
         new_name = name + '1'
         new_filepath = get_file_path(dir_path, new_name)
+        
         os.rename(filepath, new_filepath) #alters the existing name to be +1 so that client file can be received with correct name
 
-    with open(name, "wb") as receiving: #if a file exists already of same name then it may get corrupted. Issue due to the continue in directory.
+    # receives the file 
+    with open(name, "wb") as receiving: 
+        
         size_left = filesize
+        
         while size_left: 
             try:
                 filedata = conn.recv(constant.BUFFER)
@@ -103,11 +108,12 @@ def receive_file(conn, filesize, name, dir_path):
 
             receiving.write(filedata)
             size_left -= len(filedata)
+
+    if os.path.getsize(filepath) != filesize:
+        print("File  may not be fully received. Some data  may be missing")
     
-        if os.path.getsize(filepath) != filesize:
-            print("File not fully received. Some data missing")
-        else:
-            print("File received")
+    else:
+        print("File received")
 
 
 def close_server(conn, sock):
@@ -131,7 +137,7 @@ def main():
     Main Server function.
 
     Setup:
-    - Takes the directory name given as an argument for the program and creates a directory from this.
+    - Takes the directory name given as an argument for the program and creates a directory from this in the current working direcory of the server.
     - If the directory already exists it will continue with a warning.
     - Sets up the server listening on a given host and port.
     - Accepts a client connection on the socket.
@@ -141,7 +147,7 @@ def main():
     - Receives concatenated filename, filesize, and command wherein filesize is sent as 0 for remove command.
     - Then uses simple if/elif/else to check for which command has been sent and then performs the command.
     - For initial nothing is done excepting receiving the files.
-    - For update the file is received with a temporary file name then the old file is removed and the temporary renamed.
+    - For update the old file is removed then the new file received
     - For add the file is received same as for initial.
     - For remove the filename is received and then this filename removed from the directory.
 
@@ -152,7 +158,7 @@ def main():
     dir = sys.argv[1]
     path = make_directory(dir) # takes in directory name not path so create path and directory
     print("Directory setup")
-    os.chdir(path) # move into the directory 
+    os.chdir(path) 
     print("Current working directory: " + os.getcwd() + "\n")
 
     # Server setup
@@ -169,26 +175,27 @@ def main():
     
     print("Server Listening... \n")
 
-    sock.listen(1)# accepts only one connection
+    sock.listen(1) # accepts only one connection
     conn, addr = sock.accept()
 
+    # Synchronising the directory
     print("Listening for client commands to sychronise directory... ")
     while True:
-        # listening to client commands
         try:
             receive = conn.recv(constant.BUFFER).decode()
         except socket.error:
             print("Error receiving data")
 
-
+        # happens when client disconnects etc.
         if len(receive) == 0 :
             break
 
-        command, filesize, filename = receive.split('*')
+        command, filesize, filename = receive.split('*') # concatenated information in first packet
         
         filesize = int(filesize)
         print("Received command: " + command)
 
+        # parse commands
         if command == "initial":
             receive_file(conn, filesize, filename, path)
             
@@ -198,16 +205,15 @@ def main():
 
         elif command == "update":
             print("Updating file")
-            os.remove(filename)
+            remove(filename)
             receive_file(conn, filesize, filename, path)
 
         elif command == "remove":
             print("Removing file")
-            os.remove(filename)
+            remove(filename)
 
         else:
             print("Command not recognised")
-            # Note: this will also happen when other packets come through
 
 
     close_server(conn, sock)

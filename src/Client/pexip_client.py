@@ -13,10 +13,9 @@ import constant
 
 def error_message(message):
     '''
-    Prints and error message and exits the program with exit code 1.
+    Prints an error message and exits the program with exit code 1.
 
     Parameters:
-    e -- error
     message -- specific error message to be printed
 
     '''
@@ -29,7 +28,7 @@ def get_file_path(dir_path, filename):
     Gets the path of a file.
 
     Parameters:
-    dir_path -- firectory of the file
+    dir_path -- directory of the file
     filename -- name of the file
 
     Returns:
@@ -55,7 +54,7 @@ def dir_info(path):
     for file in os.listdir(path):
         filepath = get_file_path(path, file)
         status = os.stat(filepath)
-        mod = status.st_mtime
+        mod = status.st_mtime   #   Gets the last updated time
         dir[file] = mod
     
     return dir
@@ -73,20 +72,25 @@ def send_file(sock, filename, filepath, command):
 
     '''
     filesize = os.path.getsize(filepath)
-
     print("Sending file")
+
+    # Send concatenated information
     try:
-        sock.send((command + '*' + str(filesize) + '*' + filename).encode())
+        sock.send((command + '*' + str(filesize) + '*' + filename).encode()) 
+    
     except socket.error:
         error_message("Error sending data")
 
-    with open(filepath,"rb") as sending:
+    # Read and send file
+    with open(filepath,"rb") as sending: 
+
         read = sending.read(constant.BUFFER)
         while read:
             try:
                 sock.send(read)
             except socket.error:
                 error_message("Error sending data")
+
             read = sending.read(constant.BUFFER)
 
 
@@ -175,14 +179,16 @@ def main():
     print("Connected to server \n")
 
 
-    print("Sending over directory to be monitored \n")
+    # initial contents of directory
+    print("Sending over directory to be monitored ")
     for file in os.listdir(dir_path):
         filepath = get_file_path(dir_path, file)
         send_file(sock, file, filepath, "initial")
         
 
-    # getting the old info
-    print("Monitoring Directory... \n")
+    #Directory then monitored after initial sent
+    print("\nMonitoring Directory... ")
+
     old = dir_info(dir_path)
     while True:
         time.sleep(5)
@@ -194,7 +200,7 @@ def main():
                 add(sock, file, get_file_path(dir_path, file))
             
             else:
-                old_value = old[file]
+                old_value = old[file] # Last updated time = value
                 new_value = new[file]
                 if old_value != new_value:
                     update(sock, file, get_file_path(dir_path, file))
@@ -204,7 +210,7 @@ def main():
             if not file in new:
                 remove(sock, file)
         
-        # set the old to the new 
+        # set the old dictionary to the new 
         old = new
     
 
