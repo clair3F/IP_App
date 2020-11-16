@@ -14,17 +14,17 @@ The src folder contains a client and server folder. Within these there are: pexi
 
 First:
 
-Run the server using: __pexip_server.py <directory_name>__
+* Run the server using: __pexip_server.py <directory_name>__
 
-Where the directory name is the name of the directory you want to create. This does not have to be the same as the client-side directory name.
+* Where the directory name is the name of the directory you want to create. This does not have to be the same as the client-side directory name.
 
-*If the directory name is already used for a directory where the server is running (as the new directory is created in the same current working directory as the server) the application will continue but with a warning of this in case it was unknown.*
+* *If the directory name is already used for a directory where the server is running (as the new directory is created in the same current working directory as the server) the application will continue but with a warning of this in case it was unknown.*
 
 Then:
 
-Run the client using: __py pexip_client.py <directory_path>__
+* Run the client using: __py pexip_client.py <directory_path>__
 
-Where the directory path is the absolute path to the directory that will be synchronised.
+* Where the directory path is the absolute path to the directory that will be synchronised.
 
 
 # Known Shortcomings
